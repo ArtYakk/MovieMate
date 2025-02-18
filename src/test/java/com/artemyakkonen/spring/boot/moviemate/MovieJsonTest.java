@@ -35,8 +35,8 @@ public class MovieJsonTest {
         assertThat(json.write(movie)).hasJsonPathStringValue("@.title");
         assertThat(json.write(movie)).extractingJsonPathStringValue("@.title").isEqualTo("War and Peace");
 
-        assertThat(json.write(movie)).hasJsonPathStringValue("@.author");
-        assertThat(json.write(movie)).extractingJsonPathStringValue("@.author").isEqualTo("Lev Tolstoy");
+        assertThat(json.write(movie)).hasJsonPathStringValue("@.director");
+        assertThat(json.write(movie)).extractingJsonPathStringValue("@.director").isEqualTo("Lev Tolstoy");
 
         assertThat(json.write(movie)).hasJsonPathNumberValue("@.year");
         assertThat(json.write(movie)).extractingJsonPathNumberValue("@.year").isEqualTo(1867);
@@ -48,7 +48,7 @@ public class MovieJsonTest {
                 {
                   "id": 11,
                   "title": "War and Peace",
-                  "author": "Lev Tolstoy",
+                  "director": "Lev Tolstoy",
                   "genre": null,
                   "year": 1867,
                   "description": null,
@@ -59,7 +59,7 @@ public class MovieJsonTest {
             assertThat(json.parse(expected)).isEqualTo(new Movie(11, "War and Peace", "Lev Tolstoy", 1867));
             assertThat(json.parseObject(expected).getId()).isEqualTo(11);
             assertThat(json.parseObject(expected).getTitle()).isEqualTo("War and Peace");
-            assertThat(json.parseObject(expected).getAuthor()).isEqualTo("Lev Tolstoy");
+            assertThat(json.parseObject(expected).getDirector()).isEqualTo("Lev Tolstoy");
             assertThat(json.parseObject(expected).getYear()).isEqualTo(1867);
         } catch (IOException e) {
             System.out.println("Failed to parse json or Object");
