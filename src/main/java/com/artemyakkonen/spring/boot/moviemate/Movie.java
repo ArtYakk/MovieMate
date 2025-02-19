@@ -1,21 +1,37 @@
 package com.artemyakkonen.spring.boot.moviemate;
 
+import jakarta.persistence.*;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@Entity
+@Table
 public class Movie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column
     private String title;
+
+    @Column
     private String director;
+
+    @Column
     private String genre;
+
+    @Column
     private int year;
+
+    @Column
     private String description;
-    private String[] reviews;
+
 
     public Movie() {
     }
 
-    public Movie(int id, String title, String director, int year) {
+        public Movie(int id, String title, String director, int year) {
         this.id = id;
         this.title = title;
         this.director = director;
@@ -82,13 +98,6 @@ public class Movie {
         this.description = description;
     }
 
-    public String[] getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(String[] reviews) {
-        this.reviews = reviews;
-    }
 
     @Override
     public String toString() {
@@ -99,7 +108,6 @@ public class Movie {
                 ", genre='" + genre + '\'' +
                 ", year='" + year + '\'' +
                 ", description='" + description + '\'' +
-                ", reviews=" + Arrays.toString(reviews) +
                 '}';
     }
 

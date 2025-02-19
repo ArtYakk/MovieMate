@@ -23,7 +23,7 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnMovieWhenDataIsSaved() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies/10", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies/21", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -44,7 +44,6 @@ class MovieMateApplicationTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).isBlank();
-
 
     }
 
