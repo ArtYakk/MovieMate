@@ -23,7 +23,7 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnMovieWhenDataIsSaved() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies/21", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies/1", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -31,10 +31,10 @@ class MovieMateApplicationTests {
 
         Number id = documentContext.read("$.id");
         assertThat(id).isNotNull();
-        assertThat(id).isEqualTo(21);
+        assertThat(id).isEqualTo(1);
 
         String title = documentContext.read("$.title");
-        assertThat(title).isEqualTo("The LOR");
+        assertThat(title).isEqualTo("Hencock");
 
     }
 
