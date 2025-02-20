@@ -2,125 +2,37 @@ package com.artemyakkonen.spring.boot.moviemate;
 
 import jakarta.persistence.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table
-public class Movie {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@Table(name = "movies")
+public record Movie(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        Long id,
 
-    @Column
-    private String title;
+        @Column
+        String title,
 
-    @Column
-    private String director;
+        @Column
+        String director,
 
-    @Column
-    private String genre;
+        @Column
+        String genre,
 
-    @Column
-    private int year;
+        @Column
+        Long year,
 
-    @Column
-    private String description;
+        @Column
+        String description,
 
-
-    public Movie() {
-    }
-
-        public Movie(int id, String title, String director, int year) {
-        this.id = id;
-        this.title = title;
-        this.director = director;
-        this.genre = genre;
-        this.year = year;
-        this.description = description;
-    }
-
-    public Movie(int id, String title, String director, String genre, int year, String description) {
-        this.id = id;
-        this.title = title;
-        this.director = director;
-        this.genre = genre;
-        this.year = year;
-        this.description = description;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", director='" + director + '\'' +
-                ", genre='" + genre + '\'' +
-                ", year='" + year + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Movie movie = (Movie) o;
-        return Objects.equals(title, movie.title) && Objects.equals(director, movie.director) && Objects.equals(genre, movie.genre) && Objects.equals(year, movie.year);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, director, genre, year);
-    }
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Review.class)
+        List<Review> reviews
+){
+        public Movie(Long id, String title, String director, Long year){
+                this(id, title, director, "", year, "", null);
+        }
 }
+

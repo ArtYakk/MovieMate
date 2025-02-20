@@ -14,7 +14,7 @@ public class MovieMateController {
     @GetMapping("/{requestedId}")
     private ResponseEntity<Movie> findById(@PathVariable Long requestedId){
         if(requestedId == 21){
-            Movie movie = new Movie(21, "The LOR", "Peter Jackson", 2001);
+            Movie movie = new Movie(21L, "The LOR", "Peter Jackson", 2001L);
             return ResponseEntity.ok(movie);
         }else{
         return ResponseEntity.notFound().build();
