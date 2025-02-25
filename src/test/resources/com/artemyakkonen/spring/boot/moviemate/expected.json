@@ -2,8 +2,8 @@
   "id": 11,
   "title": "War and Peace",
   "director": "Lev Tolstoy",
-  "genre": "",
+  "genre": null,
   "year": 1867,
-  "description": "",
+  "description": null,
   "reviews": null
 }

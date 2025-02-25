@@ -49,18 +49,18 @@ public class MovieJsonTest {
                   "id": 11,
                   "title": "War and Peace",
                   "director": "Lev Tolstoy",
-                  "genre": "",
+                  "genre": null,
                   "year": 1867,
-                  "description": "",
+                  "description": null,
                   "reviews": null
                 }
                 """;
         try {
             assertThat(json.parse(expected)).isEqualTo(new Movie(11L, "War and Peace", "Lev Tolstoy", 1867L));
-            assertThat(json.parseObject(expected).id()).isEqualTo(11L);
-            assertThat(json.parseObject(expected).title()).isEqualTo("War and Peace");
-            assertThat(json.parseObject(expected).director()).isEqualTo("Lev Tolstoy");
-            assertThat(json.parseObject(expected).year()).isEqualTo(1867L);
+            assertThat(json.parseObject(expected).getId()).isEqualTo(11L);
+            assertThat(json.parseObject(expected).getTitle()).isEqualTo("War and Peace");
+            assertThat(json.parseObject(expected).getDirector()).isEqualTo("Lev Tolstoy");
+            assertThat(json.parseObject(expected).getYear()).isEqualTo(1867L);
         } catch (IOException e) {
             System.out.println("Failed to parse json or Object");
         }

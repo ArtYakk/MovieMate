@@ -1,38 +1,45 @@
 package com.artemyakkonen.spring.boot.moviemate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "movies")
-public record Movie(
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@RequiredArgsConstructor
+
+public class Movie{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        Long id,
+        @NonNull
+        private Long id;
 
         @Column
-        String title,
+        @NonNull
+        private String title;
 
         @Column
-        String director,
+        @NonNull
+        private String director;
 
         @Column
-        String genre,
+        private String genre;
 
         @Column
-        Long year,
+        @NonNull
+        private Long year;
 
         @Column
-        String description,
+        private String description;
 
         @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Review.class)
-        List<Review> reviews
-){
-        public Movie(Long id, String title, String director, Long year){
-                this(id, title, director, "", year, "", null);
-        }
+        private List<Review> reviews;
 }
 
