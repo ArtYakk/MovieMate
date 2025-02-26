@@ -1,9 +1,7 @@
 package com.artemyakkonen.spring.boot.moviemate.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "reviews")
@@ -11,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Review{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

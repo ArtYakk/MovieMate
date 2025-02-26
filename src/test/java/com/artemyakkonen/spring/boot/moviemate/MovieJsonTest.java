@@ -27,7 +27,13 @@ public class MovieJsonTest {
 
     @Test
     void MovieSerializationTest() throws IOException {
-        Movie movie = new Movie(11L, "War and Peace", "Lev Tolstoy", 1867L);
+        Movie movie = Movie.builder()
+                .id(11L)
+                .title("War and Peace")
+                .director("Lev Tolstoy")
+                .year(1867L)
+                .build();
+
         assertThat(json.write(movie)).isStrictlyEqualToJson("expected.json");
 
         assertThat(json.write(movie)).hasJsonPathNumberValue("@.id");
@@ -57,7 +63,12 @@ public class MovieJsonTest {
                 }
                 """;
         try {
-            assertThat(json.parse(expected)).isEqualTo(new Movie(11L, "War and Peace", "Lev Tolstoy", 1867L));
+            assertThat(json.parse(expected)).isEqualTo(Movie.builder()
+                    .id(11L)
+                    .title("War and Peace")
+                    .director("Lev Tolstoy")
+                    .year(1867L)
+                    .build());
             assertThat(json.parseObject(expected).getId()).isEqualTo(11L);
             assertThat(json.parseObject(expected).getTitle()).isEqualTo("War and Peace");
             assertThat(json.parseObject(expected).getDirector()).isEqualTo("Lev Tolstoy");

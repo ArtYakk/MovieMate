@@ -1,5 +1,7 @@
 package com.artemyakkonen.spring.boot.moviemate;
 
+import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
+import com.artemyakkonen.spring.boot.moviemate.entity.Review;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,6 +49,40 @@ class MovieMateApplicationTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).isBlank();
+
+    }
+
+    @Test
+    void shouldAddNewFilm(){
+        List<Review> reviews = new ArrayList<>();
+
+        reviews.add(Review.builder()
+                .review_author("Autest1")
+                .rating(8L)
+                .content("ts1")
+                .build());
+        reviews.add(Review.builder()
+                .review_author("Autest2")
+                .rating(9L)
+                .content("ts2")
+                .build());
+        reviews.add(Review.builder()
+                .review_author("Autest3")
+                .rating(10L)
+                .content("ts3")
+                .build());
+
+        Movie movie = Movie.builder()
+                .title("Titest")
+                .director("Ditest")
+                .genre("Getest")
+                .year(1500L)
+                .description("Detest")
+                .reviews(reviews)
+                .build();
+
+        ResponseEntity<Void> response = restTemplate.postForEntity("/movies", movie, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     }
 

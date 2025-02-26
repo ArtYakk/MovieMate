@@ -12,27 +12,23 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
+@Builder
 
 public class Movie{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @NonNull
         private Long id;
 
         @Column
-        @NonNull
         private String title;
 
         @Column
-        @NonNull
         private String director;
 
         @Column
         private String genre;
 
         @Column
-        @NonNull
         private Long year;
 
         @Column

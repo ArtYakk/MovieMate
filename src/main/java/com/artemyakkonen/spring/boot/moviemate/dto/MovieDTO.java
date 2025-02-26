@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
+@Builder
 public class MovieDTO{
     @NonNull
     private Long id;
