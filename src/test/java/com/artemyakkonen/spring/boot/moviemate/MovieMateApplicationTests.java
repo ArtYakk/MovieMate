@@ -11,6 +11,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,8 +82,20 @@ class MovieMateApplicationTests {
                 .reviews(reviews)
                 .build();
 
-        ResponseEntity<Void> response = restTemplate.postForEntity("/movies", movie, Void.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Void> postResponse = restTemplate.postForEntity("/movies/", movie, Void.class);
+        assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        URI locationOfNewFilm = postResponse.getHeaders().getLocation();
+        ResponseEntity<String> getResponse = restTemplate.getForEntity(locationOfNewFilm, String.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(getResponse.getBody());
+        Number id = documentContext.read("$.id");
+        Number year = documentContext.read("$.year");
+
+        assertThat(id).isNotNull();
+        assertThat(year).isEqualTo(1500);
+
 
     }
 

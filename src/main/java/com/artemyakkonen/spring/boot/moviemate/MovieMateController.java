@@ -5,10 +5,10 @@ import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +53,16 @@ public class MovieMateController {
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/")
+    private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
+        Movie savedMovie = movieMateRepository.save(newMovie);
+        URI locationOfNewCashCard = ucb
+                .path("/movies/{id}")
+                .buildAndExpand(savedMovie.getId())
+                .toUri();
+        return ResponseEntity.created(locationOfNewCashCard).build();
     }
 
 }
