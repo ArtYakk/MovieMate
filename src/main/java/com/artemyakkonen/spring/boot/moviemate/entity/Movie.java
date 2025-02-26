@@ -1,6 +1,5 @@
-package com.artemyakkonen.spring.boot.moviemate;
+package com.artemyakkonen.spring.boot.moviemate.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 

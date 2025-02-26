@@ -1,4 +1,4 @@
-package com.artemyakkonen.spring.boot.moviemate;
+package com.artemyakkonen.spring.boot.moviemate.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
