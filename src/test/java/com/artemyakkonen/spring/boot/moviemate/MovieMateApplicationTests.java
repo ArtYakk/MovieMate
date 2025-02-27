@@ -82,7 +82,7 @@ class MovieMateApplicationTests {
                 .reviews(reviews)
                 .build();
 
-        ResponseEntity<Void> postResponse = restTemplate.postForEntity("/movies/", movie, Void.class);
+        ResponseEntity<Void> postResponse = restTemplate.postForEntity("/movies", movie, Void.class);
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         URI locationOfNewFilm = postResponse.getHeaders().getLocation();

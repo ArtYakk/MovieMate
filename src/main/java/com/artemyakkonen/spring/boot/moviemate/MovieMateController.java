@@ -5,6 +5,7 @@ import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("/")
 public class MovieMateController {
     private final MovieMateRepository movieMateRepository;
 
@@ -22,7 +23,7 @@ public class MovieMateController {
         this.movieMateRepository = movieMateRepository;
     }
 
-    @GetMapping("/{requestedId}")
+    @GetMapping("/movies/{requestedId}")
     private ResponseEntity<MovieDTO> findById(@PathVariable Long requestedId){
         Optional<Movie> movieOptional = movieMateRepository.findById(requestedId);
         if(movieOptional.isPresent()){
@@ -55,7 +56,7 @@ public class MovieMateController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/movies")
     private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
         Movie savedMovie = movieMateRepository.save(newMovie);
         URI locationOfNewCashCard = ucb

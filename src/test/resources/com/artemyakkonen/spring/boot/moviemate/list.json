@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "director": "Christopher Nolan",
+    "genre": "Sci-Fi",
+    "year": 2010,
+    "description": "A thief who steals corporate secrets through the use..."
+  },
+  {
+    "id": 2,
+    "title": "The Godfather",
+    "director": "Francis Ford Coppola",
+    "genre": "Crime",
+    "year": 1972,
+    "description": "The aging patriarch of an organized crime dynasty..."
+  },
+  {
+    "id": 3,
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "genre": "Action",
+    "year": 2008,
+    "description": "When the menace known as the Joker emerges from his..."
+  }
+]
