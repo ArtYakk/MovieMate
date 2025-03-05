@@ -5,7 +5,8 @@
     "director": "Christopher Nolan",
     "genre": "Sci-Fi",
     "year": 2010,
-    "description": "A thief who steals corporate secrets through the use..."
+    "description": null,
+    "reviews": null
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "director": "Francis Ford Coppola",
     "genre": "Crime",
     "year": 1972,
-    "description": "The aging patriarch of an organized crime dynasty..."
+    "description": null,
+    "reviews": null
   },
   {
     "id": 3,
@@ -21,6 +23,7 @@
     "director": "Christopher Nolan",
     "genre": "Action",
     "year": 2008,
-    "description": "When the menace known as the Joker emerges from his..."
+    "description": null,
+    "reviews": null
   }
 ]

@@ -95,8 +95,14 @@ class MovieMateApplicationTests {
 
         assertThat(id).isNotNull();
         assertThat(year).isEqualTo(1500);
+    }
 
+    @Test
+    void shouldReturnReturnAllMoviesWhenListIsRequested(){
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     }
+
 
 }

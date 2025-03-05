@@ -33,24 +33,24 @@ public class MovieJsonTest {
         movies = Arrays.array(
                 Movie.builder()
                         .id(1L)
-                        .title("")
-                        .genre("")
-                        .director("")
-                        .year(1L)
+                        .title("Inception")
+                        .genre("Sci-Fi")
+                        .director("Christopher Nolan")
+                        .year(2010L)
                         .build(),
                 Movie.builder()
                         .id(2L)
-                        .title("")
-                        .genre("")
-                        .director("")
-                        .year(1L)
+                        .title("The Godfather")
+                        .genre("Crime")
+                        .director("Francis Ford Coppola")
+                        .year(1972L)
                         .build(),
                 Movie.builder()
                         .id(3L)
-                        .title("")
-                        .genre("")
-                        .director("")
-                        .year(1L)
+                        .title("The Dark Knight")
+                        .genre("Action")
+                        .director("Christopher Nolan")
+                        .year(2008L)
                         .build()
         );
     }
@@ -110,28 +110,45 @@ public class MovieJsonTest {
     }
 
     @Test
-    void movieListSerializationTest(){
-        List<Movie> movieList = new ArrayList<>();
-        movieList.add(Movie.builder()
-                .id(1L)
-                .title("Inception")
-                .director("Christopher Nolan")
-                .year(2010L)
-                .build());
-        movieList.add(Movie.builder()
-                .id(2L)
-                .title("The Godfather")
-                .director("Francis Ford Coppola")
-                .year(1972L)
-                .build());
-        movieList.add(Movie.builder()
-                .id(3L)
-                .title("The Dark Knight")
-                .director("The Dark Knight")
-                .year(2008L)
-                .build());
+    void movieListSerializationTest() throws IOException {
+        assertThat(jsonList.write(movies)).isStrictlyEqualToJson("list.json");
+    }
 
+    @Test
+    void movieListDeserializationTest() throws IOException {
+        String testJson = """
+                [
+                  {
+                    "id": 1,
+                    "title": "Inception",
+                    "director": "Christopher Nolan",
+                    "genre": "Sci-Fi",
+                    "year": 2010,
+                    "description": null,
+                    "reviews": null
+                  },
+                  {
+                    "id": 2,
+                    "title": "The Godfather",
+                    "director": "Francis Ford Coppola",
+                    "genre": "Crime",
+                    "year": 1972,
+                    "description": null,
+                    "reviews": null
+                  },
+                  {
+                    "id": 3,
+                    "title": "The Dark Knight",
+                    "director": "Christopher Nolan",
+                    "genre": "Action",
+                    "year": 2008,
+                    "description": null,
+                    "reviews": null
+                  }
+                ]
+                """;
 
+        assertThat(jsonList.parse(testJson)).isEqualTo(movies);
     }
 
 

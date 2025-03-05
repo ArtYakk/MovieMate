@@ -66,4 +66,9 @@ public class MovieMateController {
         return ResponseEntity.created(locationOfNewCashCard).build();
     }
 
+    @GetMapping("/movies")
+    private ResponseEntity<Iterable<Movie>> findAll(){
+        return ResponseEntity.ok(movieMateRepository.findAll());
+    }
+
 }
