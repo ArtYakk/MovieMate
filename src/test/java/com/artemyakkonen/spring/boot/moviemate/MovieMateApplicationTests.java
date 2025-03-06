@@ -2,8 +2,13 @@ package com.artemyakkonen.spring.boot.moviemate;
 
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.entity.Review;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import org.assertj.core.api.Assertions;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,10 +105,20 @@ class MovieMateApplicationTests {
     }
 
     @Test
-    void shouldReturnReturnAllMoviesWhenListIsRequested(){
+    void shouldReturnReturnAllMoviesWhenListIsRequested() throws JSONException {
         ResponseEntity<String> response = restTemplate.getForEntity("/movies", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        int movieCount = documentContext.read("$.length()");
+        assertThat(movieCount).isEqualTo(11);
+
+//        JSONArray idJsonArray = documentContext.read("$..id");
+//        List<Long> idList = new ArrayList<>();
+//        for(int i=0; i<idJsonArray.length(); i++){
+//            idList.add(idJsonArray.getLong(i));
+//        }
+//        assertThat(idList).containsExactlyInAnyOrder(1L, 2L, 3L);
     }
 
 

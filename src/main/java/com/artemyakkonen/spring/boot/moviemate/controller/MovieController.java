@@ -1,11 +1,11 @@
-package com.artemyakkonen.spring.boot.moviemate;
+package com.artemyakkonen.spring.boot.moviemate.controller;
 
+import com.artemyakkonen.spring.boot.moviemate.MovieMateRepository;
 import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
 import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,11 +15,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
-public class MovieMateController {
+public class MovieController {
     private final MovieMateRepository movieMateRepository;
 
     @Autowired
-    public MovieMateController(MovieMateRepository movieMateRepository){
+    public MovieController(MovieMateRepository movieMateRepository){
         this.movieMateRepository = movieMateRepository;
     }
 
@@ -68,6 +68,10 @@ public class MovieMateController {
 
     @GetMapping("/movies")
     private ResponseEntity<Iterable<Movie>> findAll(){
+       Iterable<Movie> movieIterable = movieMateRepository.findAll();
+       if(movieIterable.iterator().hasNext()){
+
+       }
         return ResponseEntity.ok(movieMateRepository.findAll());
     }
 

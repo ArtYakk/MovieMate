@@ -1,9 +1,9 @@
-package com.artemyakkonen.spring.boot.moviemate;
+package com.artemyakkonen.spring.boot.moviemate.repository;
 
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface MovieMateRepository extends CrudRepository<Movie, Long> {
+public interface MovieRepository extends CrudRepository<Movie, Long> {
 }
