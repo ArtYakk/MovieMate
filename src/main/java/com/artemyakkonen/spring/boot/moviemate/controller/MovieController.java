@@ -1,9 +1,10 @@
 package com.artemyakkonen.spring.boot.moviemate.controller;
 
-import com.artemyakkonen.spring.boot.moviemate.MovieMateRepository;
+import com.artemyakkonen.spring.boot.moviemate.MovieRepository;
 import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
 import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
+import com.artemyakkonen.spring.boot.moviemate.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/")
 public class MovieController {
-    private final MovieMateRepository movieMateRepository;
+    private final MovieService movieService;
 
     @Autowired
-    public MovieController(MovieMateRepository movieMateRepository){
-        this.movieMateRepository = movieMateRepository;
+    public MovieController(MovieService movieService){
+        this.movieService = movieService;
     }
 
     @GetMapping("/movies/{requestedId}")
