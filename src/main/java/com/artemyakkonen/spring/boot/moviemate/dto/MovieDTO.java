@@ -9,17 +9,14 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class MovieDTO{
-    @NonNull
     private Long id;
 
-    @NonNull
     private String title;
 
-    @NonNull
     private String director;
 
     private String genre;
-    @NonNull
+
     private Long year;
 
     private String description;
