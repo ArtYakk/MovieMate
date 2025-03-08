@@ -2,12 +2,11 @@ package com.artemyakkonen.spring.boot.moviemate;
 
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.entity.Review;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import org.assertj.core.api.Assertions;
-import org.json.JSONArray;
+
+import net.minidev.json.JSONArray;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MovieMateApplicationTests {
 
     TestRestTemplate restTemplate;
@@ -61,6 +64,7 @@ class MovieMateApplicationTests {
     }
 
     @Test
+    @Sql(scripts = "cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldAddNewFilm(){
         List<Review> reviews = new ArrayList<>();
 
@@ -111,14 +115,14 @@ class MovieMateApplicationTests {
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         int movieCount = documentContext.read("$.length()");
-        assertThat(movieCount).isEqualTo(11);
+        assertThat(movieCount).isEqualTo(7);
 
-//        JSONArray idJsonArray = documentContext.read("$..id");
-//        List<Long> idList = new ArrayList<>();
-//        for(int i=0; i<idJsonArray.length(); i++){
-//            idList.add(idJsonArray.getLong(i));
-//        }
-//        assertThat(idList).containsExactlyInAnyOrder(1L, 2L, 3L);
+        JSONArray idJsonArray = documentContext.read("$..id");
+        List<Long> idList = new ArrayList<>();
+        for(int i=0; i<idJsonArray.size(); i++){
+            idList.add(Long.valueOf((Integer)idJsonArray.get(i)));
+        }
+     //   assertThat(idList).containsExactlyInAnyOrder(1L, 2L, 3L, 4L, 5L, 6L, 9L);
     }
 
 
