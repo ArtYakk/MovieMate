@@ -135,5 +135,30 @@ class MovieMateApplicationTests {
         assertThat(page.size()).isEqualTo(1);
     }
 
+    @Test
+    void shouldReturnASortedPageOfMovies(){
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies?page=0&size=1&sort=year,desc", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        JSONArray page = documentContext.read("$[*]");
+        assertThat(page.size()).isEqualTo(1);
+
+        Number year = documentContext.read("$[0].year");
+        assertThat(year).isEqualTo(2014);
+
+    }
+
+    @Test
+    void shouldReturnASortedPageOfMoviesWithNoParametersAndUseDefaultValues(){
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        JSONArray page = documentContext.read("$[*]");
+
+        assertThat(page.size()).isEqualTo(1);
+    }
+
 
 }

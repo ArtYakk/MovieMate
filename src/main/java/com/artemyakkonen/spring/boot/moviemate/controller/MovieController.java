@@ -50,7 +50,8 @@ public class MovieController {
         List<MovieDTO> page = movieService.findAllMovies(
                 PageRequest.of(
                         pageable.getPageNumber(),
-                        pageable.getPageSize()
+                        pageable.getPageSize(),
+                        pageable.getSort()
                 )
         );
                 return ResponseEntity.ok(page);
