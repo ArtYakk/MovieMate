@@ -1,9 +1,7 @@
 package com.artemyakkonen.spring.boot.moviemate.mapper;
 
 import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
-import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
-import com.artemyakkonen.spring.boot.moviemate.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +16,7 @@ public class MovieMapper {
         this.reviewMapper = reviewMapper;
     }
 
-    public MovieDTO getMovieDTO(Movie movie) {
+    public MovieDTO toMovieDTO(Movie movie) {
         return MovieDTO.builder()
                 .id(movie.getId())
                 .title(movie.getTitle())
@@ -30,7 +28,7 @@ public class MovieMapper {
                 .build();
     }
 
-    public Movie getMovie(MovieDTO movieDTO) {
+    public Movie toMovie(MovieDTO movieDTO) {
         return Movie.builder()
                 .id(movieDTO.getId())
                 .title(movieDTO.getTitle())
@@ -40,5 +38,17 @@ public class MovieMapper {
                 .description(movieDTO.getDescription())
                 .reviews(reviewMapper.toReviewList(movieDTO.getReviews()))
                 .build();
+    }
+
+    public List<MovieDTO> toMovieDTOList(List<Movie> movies) {
+        return movies.stream()
+                .map(this::toMovieDTO)
+                .toList();
+    }
+
+    public List<Movie> toMovieList(List<MovieDTO> movies) {
+        return movies.stream()
+                .map(this::toMovie)
+                .toList();
     }
 }

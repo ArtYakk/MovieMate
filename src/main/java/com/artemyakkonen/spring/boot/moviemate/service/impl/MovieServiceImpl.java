@@ -5,13 +5,11 @@ import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.mapper.MovieMapper;
 import com.artemyakkonen.spring.boot.moviemate.repository.MovieRepository;
 import com.artemyakkonen.spring.boot.moviemate.service.MovieService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -30,7 +28,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDTO getMovieById(Long id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);
-        return movieOptional.map(movieMapper::getMovieDTO).orElse(null);
+        return movieOptional.map(movieMapper::toMovieDTO).orElse(null);
     }
 
     @Override
@@ -45,8 +43,13 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDTO> findAllMovies() {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
-                .map(movieMapper::getMovieDTO)
+                .map(movieMapper::toMovieDTO)
                 .toList();
+    }
+
+    @Override
+    public List<MovieDTO> findAllMovies(Pageable pageable){
+        return movieMapper.toMovieDTOList(movieRepository.findAll(pageable).getContent());
     }
 
     @Override

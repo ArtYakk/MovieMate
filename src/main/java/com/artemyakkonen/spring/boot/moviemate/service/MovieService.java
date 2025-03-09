@@ -3,6 +3,7 @@ package com.artemyakkonen.spring.boot.moviemate.service;
 import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.repository.MovieRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,4 +16,5 @@ public interface MovieService {
    List<MovieDTO> findAllMovies();
    MovieDTO updateMovie(Long id, MovieDTO movieDTO);
    void deleteMovie(Long id);
+   List<MovieDTO> findAllMovies(Pageable pageable);
 }

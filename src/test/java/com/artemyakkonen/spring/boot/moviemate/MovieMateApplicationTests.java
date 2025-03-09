@@ -27,7 +27,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MovieMateApplicationTests {
 
     TestRestTemplate restTemplate;
@@ -64,6 +63,7 @@ class MovieMateApplicationTests {
     }
 
     @Test
+    @DirtiesContext
     @Sql(scripts = "cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldAddNewFilm(){
         List<Review> reviews = new ArrayList<>();
@@ -123,6 +123,16 @@ class MovieMateApplicationTests {
             idList.add(Long.valueOf((Integer)idJsonArray.get(i)));
         }
      //   assertThat(idList).containsExactlyInAnyOrder(1L, 2L, 3L, 4L, 5L, 6L, 9L);
+    }
+
+    @Test
+    void shouldReturnAPageOfMovies(){
+        ResponseEntity<String> response = restTemplate.getForEntity("/movies?page=0&size=1", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        JSONArray page = documentContext.read("$[*]");
+        assertThat(page.size()).isEqualTo(1);
     }
 
 
