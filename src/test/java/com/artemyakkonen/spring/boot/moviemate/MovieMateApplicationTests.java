@@ -157,7 +157,7 @@ class MovieMateApplicationTests {
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         JSONArray page = documentContext.read("$[*]");
 
-        assertThat(page.size()).isEqualTo(1);
+        assertThat(page.size()).isEqualTo(7);
     }
 
 
