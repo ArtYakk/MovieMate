@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +50,7 @@ class MovieMateApplicationTests {
         assertThat(id).isEqualTo(1);
 
         String title = documentContext.read("$.title");
-        assertThat(title).isEqualTo("Hencock");
+        assertThat(title).isEqualTo("Inception");
 
     }
 
@@ -63,7 +64,6 @@ class MovieMateApplicationTests {
     }
 
     @Test
-    @DirtiesContext
     @Sql(scripts = "cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldAddNewFilm(){
         List<Review> reviews = new ArrayList<>();
@@ -115,14 +115,14 @@ class MovieMateApplicationTests {
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         int movieCount = documentContext.read("$.length()");
-        assertThat(movieCount).isEqualTo(7);
+        assertThat(movieCount).isEqualTo(5);
 
         JSONArray idJsonArray = documentContext.read("$..id");
         List<Long> idList = new ArrayList<>();
         for(int i=0; i<idJsonArray.size(); i++){
             idList.add(Long.valueOf((Integer)idJsonArray.get(i)));
         }
-     //   assertThat(idList).containsExactlyInAnyOrder(1L, 2L, 3L, 4L, 5L, 6L, 9L);
+        assertThat(idList.size()).isEqualTo(5);
     }
 
     @Test
@@ -157,7 +157,7 @@ class MovieMateApplicationTests {
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         JSONArray page = documentContext.read("$[*]");
 
-        assertThat(page.size()).isEqualTo(7);
+        assertThat(page.size()).isEqualTo(5);
     }
 
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
@@ -22,6 +23,30 @@ public class MovieController {
     public MovieController(MovieService movieService){
         this.movieService = movieService;
     }
+
+    @GetMapping("/welcome")
+    public String welcome(){
+        return "This is unprotected page";
+    }
+
+    @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public String pageForUser(){
+        return "This page is only for users";
+    }
+
+    @GetMapping("/admins")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String pageForAdmin(){
+        return "This page is only for admins";
+    }
+
+    @GetMapping("/all")
+    public String pageForAll(){
+        return "This page is only for all employees";
+    }
+
+    /////////////////////////////////////////////////////////////////////
 
     @GetMapping("/movies/{requestedId}")
     private ResponseEntity<MovieDTO> findById(@PathVariable Long requestedId){
