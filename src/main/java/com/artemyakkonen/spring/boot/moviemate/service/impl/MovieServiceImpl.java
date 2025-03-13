@@ -5,6 +5,7 @@ import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.mapper.MovieMapper;
 import com.artemyakkonen.spring.boot.moviemate.repository.MovieRepository;
 import com.artemyakkonen.spring.boot.moviemate.service.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,6 +21,9 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
 
+    public MovieServiceImpl(){}
+
+    @Autowired
     public MovieServiceImpl(MovieRepository movieRepository, MovieMapper movieMapper){
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;

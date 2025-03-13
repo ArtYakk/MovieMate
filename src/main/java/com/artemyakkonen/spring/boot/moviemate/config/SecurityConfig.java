@@ -1,6 +1,7 @@
 package com.artemyakkonen.spring.boot.moviemate.config;
 
 import com.artemyakkonen.spring.boot.moviemate.config.MyUserDetailsService;
+import com.artemyakkonen.spring.boot.moviemate.service.impl.MovieServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,6 +24,11 @@ public class SecurityConfig {
     @Bean // Возвращаем кастомный MyUserDetailsService
     public MyUserDetailsService userDetailsService(){
         return new MyUserDetailsService();
+    }
+
+    @Bean
+    public MovieServiceImpl movieService(){
+        return new MovieServiceImpl();
     }
 
     @Bean
