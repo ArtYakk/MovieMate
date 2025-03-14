@@ -1,4 +1,4 @@
-package com.artemyakkonen.spring.boot.moviemate.config;
+package com.artemyakkonen.spring.boot.moviemate.security.user;
 
 import com.artemyakkonen.spring.boot.moviemate.entity.User;
 import org.springframework.security.core.GrantedAuthority;

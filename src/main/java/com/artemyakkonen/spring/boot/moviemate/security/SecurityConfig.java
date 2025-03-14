@@ -1,12 +1,11 @@
-package com.artemyakkonen.spring.boot.moviemate.config;
+package com.artemyakkonen.spring.boot.moviemate.security;
 
-import com.artemyakkonen.spring.boot.moviemate.config.MyUserDetailsService;
+import com.artemyakkonen.spring.boot.moviemate.security.user.MyUserDetailsService;
 import com.artemyakkonen.spring.boot.moviemate.service.impl.MovieServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
