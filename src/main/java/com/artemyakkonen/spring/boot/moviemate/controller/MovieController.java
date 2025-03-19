@@ -30,13 +30,11 @@ public class MovieController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String pageForUser(){
         return "This page is only for users";
     }
 
     @GetMapping("/admins")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String pageForAdmin(){
         return "This page is only for admins";
     }
@@ -46,9 +44,7 @@ public class MovieController {
         return "This page is only for all employees";
     }
 
-    /////////////////////////////////////////////////////////////////////
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/movies/{requestedId}")
     private ResponseEntity<MovieDTO> findById(@PathVariable Long requestedId){
         MovieDTO movieDTO = movieService.getMovieById(requestedId);
@@ -59,17 +55,11 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
+    @PreAuthorize("hasRole('USER')")
     private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
         URI locationOfNewFilm = movieService.createMovie(newMovie, ucb);
         return ResponseEntity.created(locationOfNewFilm).build();
     }
-
-//    @GetMapping("/movies")
-//    private ResponseEntity<List<MovieDTO>> findAllMovies(){
-//       List<MovieDTO> movieDTOList = movieService.findAllMovies();
-//
-//        return ResponseEntity.ok(movieDTOList);
-//    }
 
     @GetMapping("/movies")
     private ResponseEntity<List<MovieDTO>> findAllMovies(Pageable pageable){

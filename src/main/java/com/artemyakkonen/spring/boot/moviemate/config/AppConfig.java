@@ -4,6 +4,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = "com.artemyakkonen.spring.boot.moviemate")
+//@ComponentScan(basePackages = "com.artemyakkonen.spring.boot.moviemate")
 public class AppConfig {
 }
