@@ -2,25 +2,20 @@ package com.artemyakkonen.spring.boot.moviemate.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.management.relation.Role;
-
 @Configuration
 @EnableWebSecurity // SecurityFilterChain
-        //@EnableMethodSecurity // Безопасность на уровне методов @PreAuthorize, @PostAuthorize, @Secured и @RolesAllowed
+@EnableMethodSecurity // Безопасность на уровне методов @PreAuthorize, @PostAuthorize, @Secured и @RolesAllowed
 public class SecurityConfig {
 
 
@@ -29,13 +24,18 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/welcome").permitAll() // Без авторизации
-//                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/movies/**").hasAuthority("USER")
+                        .requestMatchers("/welcome").permitAll() // Без авторизации
+                        .requestMatchers("/users").hasRole("USER")
+                        .requestMatchers("/admins").hasRole("ADMIN")
+                        .requestMatchers("/all").hasAnyRole("USER", "ADMIN")
+
+                        //.requestMatchers("/movies/{requestedId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/movies/**").hasAnyRole("USER", "ADMIN")
+
                         .anyRequest().authenticated() // аналог .requestMatchers("/**").authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
-                .logout(LogoutConfigurer::permitAll)
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+               // .logout(LogoutConfigurer::permitAll)
 //                .formLogin(form -> form
 //                        .loginPage("/login")
 //                        .defaultSuccessUrl("/home", true)

@@ -4,7 +4,6 @@ import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,10 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    //@PreAuthorize("hasRole('ALL')")
     @GetMapping("/welcome")
     public String welcome(){
-        return "This is unprotected page";
+        return "This is unprotected WELCOME page";
     }
 
     @GetMapping("/users")
@@ -54,13 +54,14 @@ public class MovieController {
         return ResponseEntity.ok(movieDTO);
     }
 
+
     @PostMapping("/movies")
-    @PreAuthorize("hasRole('USER')")
     private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
         URI locationOfNewFilm = movieService.createMovie(newMovie, ucb);
         return ResponseEntity.created(locationOfNewFilm).build();
     }
 
+    //@PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/movies")
     private ResponseEntity<List<MovieDTO>> findAllMovies(Pageable pageable){
         List<MovieDTO> page = movieService.findAllMovies(
