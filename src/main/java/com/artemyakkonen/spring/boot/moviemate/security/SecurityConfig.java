@@ -29,12 +29,14 @@ public class SecurityConfig {
                         .requestMatchers("/admins").hasRole("ADMIN")
                         .requestMatchers("/all").hasAnyRole("USER", "ADMIN")
 
-                        //.requestMatchers("/movies/{requestedId}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/movies/**").hasAnyRole("USER", "ADMIN")
-
+                        .requestMatchers(HttpMethod.GET,"/movies/{requestedId}").hasRole("USER") //Получить 1 фильм
+                        .requestMatchers(HttpMethod.POST,"/movies").hasRole("ADMIN") //Добавить фильм
+                        .requestMatchers(HttpMethod.GET,"/movies").hasAnyRole( "USER", "ADMIN") //Получить список фильмов
                         .anyRequest().authenticated() // аналог .requestMatchers("/**").authenticated()
                 )
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
+               // .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                // .logout(LogoutConfigurer::permitAll)
 //                .formLogin(form -> form
 //                        .loginPage("/login")

@@ -3,22 +3,21 @@ package com.artemyakkonen.spring.boot.moviemate;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.entity.Review;
 
+import com.artemyakkonen.spring.boot.moviemate.util.AnsiColors;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ansi.AnsiBackground;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MovieMateApplicationTests {
 
@@ -39,8 +39,11 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnMovieWhenDataIsSaved() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies/1", String.class);
 
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies/1", String.class);
+        //log.info(AnsiColors.blackOnBlue(response.getBody()));
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -50,13 +53,16 @@ class MovieMateApplicationTests {
         assertThat(id).isEqualTo(1);
 
         String title = documentContext.read("$.title");
+
         assertThat(title).isEqualTo("Inception");
 
     }
 
     @Test
     void shouldNotReturnMovieWithUnknownId() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies/1000", String.class);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies/1000", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).isBlank();
@@ -93,11 +99,15 @@ class MovieMateApplicationTests {
                 .reviews(reviews)
                 .build();
 
-        ResponseEntity<Void> postResponse = restTemplate.postForEntity("/movies", movie, Void.class);
+        ResponseEntity<Void> postResponse = restTemplate
+                .withBasicAuth("admin", "admin")
+                .postForEntity("/movies", movie, Void.class);
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         URI locationOfNewFilm = postResponse.getHeaders().getLocation();
-        ResponseEntity<String> getResponse = restTemplate.getForEntity(locationOfNewFilm, String.class);
+        ResponseEntity<String> getResponse = restTemplate
+                .withBasicAuth("admin", "admin")
+                .getForEntity(locationOfNewFilm, String.class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(getResponse.getBody());
@@ -110,7 +120,9 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnReturnAllMoviesWhenListIsRequested() throws JSONException {
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies", String.class);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -127,7 +139,9 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnAPageOfMovies(){
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies?page=0&size=1", String.class);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies?page=0&size=1", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -137,7 +151,9 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnASortedPageOfMovies(){
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies?page=0&size=1&sort=year,desc", String.class);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies?page=0&size=1&sort=year,desc", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -151,7 +167,9 @@ class MovieMateApplicationTests {
 
     @Test
     void shouldReturnASortedPageOfMoviesWithNoParametersAndUseDefaultValues(){
-        ResponseEntity<String> response = restTemplate.getForEntity("/movies", String.class);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem", "artem")
+                .getForEntity("/movies", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -160,5 +178,6 @@ class MovieMateApplicationTests {
         assertThat(page.size()).isEqualTo(5);
     }
 
-
+    @Test
+    void shouldNotReturnMovieWhenUsingBadCredentials
 }

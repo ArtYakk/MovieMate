@@ -3,7 +3,10 @@ package com.artemyakkonen.spring.boot.moviemate.controller;
 import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.service.MovieService;
+import com.artemyakkonen.spring.boot.moviemate.util.AnsiColors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ansi.AnsiBackground;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/")
 public class MovieController {
@@ -44,6 +48,7 @@ public class MovieController {
         return "This page is only for all employees";
     }
 
+    //----------------------------------------------------------------------------------------------------------//
 
     @GetMapping("/movies/{requestedId}")
     private ResponseEntity<MovieDTO> findById(@PathVariable Long requestedId){
@@ -53,7 +58,6 @@ public class MovieController {
         }
         return ResponseEntity.ok(movieDTO);
     }
-
 
     @PostMapping("/movies")
     private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
@@ -73,5 +77,7 @@ public class MovieController {
         );
                 return ResponseEntity.ok(page);
     }
+
+
 
 }
