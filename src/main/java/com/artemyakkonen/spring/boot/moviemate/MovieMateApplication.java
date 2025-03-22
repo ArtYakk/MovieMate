@@ -12,6 +12,7 @@ public class MovieMateApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MovieMateApplication.class, args);
+        //8: moviemateapplicationtests
     }
 
 }
