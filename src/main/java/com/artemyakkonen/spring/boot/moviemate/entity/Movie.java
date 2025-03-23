@@ -34,7 +34,7 @@ public class Movie{
         @Column
         private String description;
 
-        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Review.class)
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Review.class) //FetchType
         private List<Review> reviews;
 }
 

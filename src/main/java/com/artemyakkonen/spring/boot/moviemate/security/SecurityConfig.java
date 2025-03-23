@@ -9,13 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity // SecurityFilterChain
-@EnableMethodSecurity // Безопасность на уровне методов @PreAuthorize, @PostAuthorize, @Secured и @RolesAllowed
+//@EnableMethodSecurity // Безопасность на уровне методов @PreAuthorize, @PostAuthorize, @Secured и @RolesAllowed
 public class SecurityConfig {
 
 
@@ -27,17 +28,19 @@ public class SecurityConfig {
                         .requestMatchers("/welcome").permitAll() // Без авторизации
                         .requestMatchers("/users").hasRole("USER")
                         .requestMatchers("/admins").hasRole("ADMIN")
-                        .requestMatchers("/all").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/all").hasAnyRole("USER", "ADMIN", "OTHER")
 
-                        .requestMatchers(HttpMethod.GET,"/movies/{requestedId}").hasRole("USER") //Получить 1 фильм
+                        .requestMatchers(HttpMethod.GET,"/movies/{requestedId}").hasAnyRole("USER", "ADMIN") //Получить 1 фильм
                         .requestMatchers(HttpMethod.POST,"/movies").hasRole("ADMIN") //Добавить фильм
                         .requestMatchers(HttpMethod.GET,"/movies").hasAnyRole( "USER", "ADMIN") //Получить список фильмов
                         .anyRequest().authenticated() // аналог .requestMatchers("/**").authenticated()
                 )
+               // .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-               // .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-               // .logout(LogoutConfigurer::permitAll)
+                .build();
+//  .logout(LogoutConfigurer::permitAll)
+
 //                .formLogin(form -> form
 //                        .loginPage("/login")
 //                        .defaultSuccessUrl("/home", true)
@@ -51,7 +54,6 @@ public class SecurityConfig {
 //                .exceptionHandling(ex -> ex
 //                        .accessDeniedPage("/access-denied")
 //                )
-                .build();
     }
 
 

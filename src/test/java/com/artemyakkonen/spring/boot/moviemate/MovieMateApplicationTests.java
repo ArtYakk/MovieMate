@@ -43,7 +43,6 @@ class MovieMateApplicationTests {
         ResponseEntity<String> response = restTemplate
                 .withBasicAuth("artem", "artem")
                 .getForEntity("/movies/1", String.class);
-        //log.info(AnsiColors.blackOnBlue(response.getBody()));
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -179,5 +178,15 @@ class MovieMateApplicationTests {
     }
 
     @Test
-    void shouldNotReturnMovieWhenUsingBadCredentials
+    void shouldNotReturnMovieWhenUsingBadCredentials(){
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("artem","wrong_password")
+                .getForEntity("/movies/1", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+
+        response = restTemplate
+                .withBasicAuth("wrong_user","artem")
+                .getForEntity("/movies/1", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
 }

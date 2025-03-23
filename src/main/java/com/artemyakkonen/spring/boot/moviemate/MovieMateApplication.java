@@ -14,6 +14,4 @@ public class MovieMateApplication {
         SpringApplication.run(MovieMateApplication.class, args);
     }
 
-
-
 }
