@@ -24,6 +24,7 @@ public class MovieMapper {
                 .genre(movie.getGenre())
                 .year(movie.getYear())
                 .description(movie.getDescription())
+                .addedBy(movie.getAddedBy())
                 .reviews(reviewMapper.toReviewDTOList(movie.getReviews()))
                 .build();
     }
@@ -36,6 +37,7 @@ public class MovieMapper {
                 .genre(movieDTO.getGenre())
                 .year(movieDTO.getYear())
                 .description(movieDTO.getDescription())
+                .addedBy(movieDTO.getAddedBy())
                 .reviews(reviewMapper.toReviewList(movieDTO.getReviews()))
                 .build();
     }

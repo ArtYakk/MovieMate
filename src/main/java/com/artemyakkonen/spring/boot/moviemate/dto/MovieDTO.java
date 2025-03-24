@@ -21,6 +21,8 @@ public class MovieDTO{
 
     private String description;
 
+    private String addedBy;
+
     private List<ReviewDTO> reviews;
 }
 

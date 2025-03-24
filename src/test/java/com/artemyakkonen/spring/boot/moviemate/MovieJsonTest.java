@@ -37,6 +37,7 @@ public class MovieJsonTest {
                         .genre("Sci-Fi")
                         .director("Christopher Nolan")
                         .year(2010L)
+                        .addedBy("admin")
                         .build(),
                 Movie.builder()
                         .id(2L)
@@ -44,6 +45,7 @@ public class MovieJsonTest {
                         .genre("Crime")
                         .director("Francis Ford Coppola")
                         .year(1972L)
+                        .addedBy("admin")
                         .build(),
                 Movie.builder()
                         .id(3L)
@@ -51,6 +53,7 @@ public class MovieJsonTest {
                         .genre("Action")
                         .director("Christopher Nolan")
                         .year(2008L)
+                        .addedBy("admin")
                         .build()
         );
     }
@@ -62,6 +65,7 @@ public class MovieJsonTest {
                 .title("War and Peace")
                 .director("Lev Tolstoy")
                 .year(1867L)
+                .addedBy("admin")
                 .build();
 
         assertThat(json.write(movie)).isStrictlyEqualToJson("single.json");
@@ -89,7 +93,8 @@ public class MovieJsonTest {
                   "genre": null,
                   "year": 1867,
                   "description": null,
-                  "reviews": null
+                  "reviews": null,
+                  "addedBy": "admin"
                 }
                 """;
         try {
@@ -98,6 +103,7 @@ public class MovieJsonTest {
                     .title("War and Peace")
                     .director("Lev Tolstoy")
                     .year(1867L)
+                    .addedBy("admin")
                     .build());
             assertThat(json.parseObject(expected).getId()).isEqualTo(11L);
             assertThat(json.parseObject(expected).getTitle()).isEqualTo("War and Peace");
@@ -125,7 +131,8 @@ public class MovieJsonTest {
                     "genre": "Sci-Fi",
                     "year": 2010,
                     "description": null,
-                    "reviews": null
+                    "reviews": null,
+                    "addedBy": "admin"
                   },
                   {
                     "id": 2,
@@ -134,7 +141,8 @@ public class MovieJsonTest {
                     "genre": "Crime",
                     "year": 1972,
                     "description": null,
-                    "reviews": null
+                    "reviews": null,
+                    "addedBy": "admin"
                   },
                   {
                     "id": 3,
@@ -143,7 +151,8 @@ public class MovieJsonTest {
                     "genre": "Action",
                     "year": 2008,
                     "description": null,
-                    "reviews": null
+                    "reviews": null,
+                    "addedBy": "admin"
                   }
                 ]
                 """;

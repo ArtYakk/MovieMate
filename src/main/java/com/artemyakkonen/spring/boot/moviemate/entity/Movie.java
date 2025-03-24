@@ -34,6 +34,9 @@ public class Movie{
         @Column
         private String description;
 
+        @Column(name = "added_by")
+        private String addedBy;
+
         @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Review.class) //FetchType
         private List<Review> reviews;
 }

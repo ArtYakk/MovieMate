@@ -6,7 +6,8 @@
     "genre": "Sci-Fi",
     "year": 2010,
     "description": null,
-    "reviews": null
+    "reviews": null,
+    "addedBy": "admin"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "genre": "Crime",
     "year": 1972,
     "description": null,
-    "reviews": null
+    "reviews": null,
+    "addedBy": "admin"
   },
   {
     "id": 3,
@@ -24,6 +26,7 @@
     "genre": "Action",
     "year": 2008,
     "description": null,
-    "reviews": null
+    "reviews": null,
+    "addedBy": "admin"
   }
 ]

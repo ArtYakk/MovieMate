@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -60,7 +61,9 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb){
+    private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb, Principal principal){
+        newMovie.setAddedBy(principal.getName());
+        log.info(AnsiColors.blackOnBlue(principal.getName()));
         URI locationOfNewFilm = movieService.createMovie(newMovie, ucb);
         return ResponseEntity.created(locationOfNewFilm).build();
     }
