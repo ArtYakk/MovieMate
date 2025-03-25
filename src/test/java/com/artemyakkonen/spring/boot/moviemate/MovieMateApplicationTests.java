@@ -281,10 +281,25 @@ class MovieMateApplicationTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
-//    @Test
-//    void shouldDeleteExistingMovie(){
-//        ResponseEntity<Void> response = restTemplate
-//                .withBasicAuth("admin", "admin")
-//                .exchange("/movies/3")
-//    }
+    @Test
+    @Sql(scripts = "createRowAfterDeletingTest.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void shouldDeleteExistingMovie(){
+        ResponseEntity<Void> response = restTemplate
+                .withBasicAuth("admin", "admin")
+                .exchange("/movies/6", HttpMethod.DELETE, null, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        ResponseEntity<String> getResponse = restTemplate
+                .withBasicAuth("admin", "admin")
+                .getForEntity("/movies/6", String.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void shouldNotDeleteAMovieThatDoesNotExist() {
+        ResponseEntity<Void> response = restTemplate
+                .withBasicAuth("admin", "admin")
+                .exchange("/movies/99999", HttpMethod.DELETE, null, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
 }
