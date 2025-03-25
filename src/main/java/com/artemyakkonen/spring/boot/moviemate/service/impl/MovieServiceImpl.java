@@ -56,11 +56,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
-        return null;
+        movieRepository.save(movieMapper.toMovie(movieDTO));
+        return movieRepository.findById(id).map(movieMapper::toMovieDTO).orElse(null);
     }
 
     @Override
     public void deleteMovie(Long id) {
-
+        movieRepository.deleteById(id);
     }
 }

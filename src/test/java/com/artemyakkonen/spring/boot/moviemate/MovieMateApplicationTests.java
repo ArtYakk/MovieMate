@@ -1,5 +1,7 @@
 package com.artemyakkonen.spring.boot.moviemate;
 
+import com.artemyakkonen.spring.boot.moviemate.dto.MovieDTO;
+import com.artemyakkonen.spring.boot.moviemate.dto.ReviewDTO;
 import com.artemyakkonen.spring.boot.moviemate.entity.Movie;
 import com.artemyakkonen.spring.boot.moviemate.entity.Review;
 
@@ -15,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ansi.AnsiBackground;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.net.URI;
@@ -126,14 +131,14 @@ class MovieMateApplicationTests {
 
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         int movieCount = documentContext.read("$.length()");
-        assertThat(movieCount).isEqualTo(5);
+        assertThat(movieCount).isEqualTo(9);
 
         JSONArray idJsonArray = documentContext.read("$..id");
         List<Long> idList = new ArrayList<>();
         for(int i=0; i<idJsonArray.size(); i++){
             idList.add(Long.valueOf((Integer)idJsonArray.get(i)));
         }
-        assertThat(idList.size()).isEqualTo(5);
+        assertThat(idList.size()).isEqualTo(9);
     }
 
     @Test
@@ -174,7 +179,7 @@ class MovieMateApplicationTests {
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         JSONArray page = documentContext.read("$[*]");
 
-        assertThat(page.size()).isEqualTo(5);
+        assertThat(page.size()).isEqualTo(9);
     }
 
     @Test
@@ -189,4 +194,97 @@ class MovieMateApplicationTests {
                 .getForEntity("/movies/1", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
+
+    @Test
+    @Sql(scripts = "cleanAfterUpdateMovie.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void shouldUpdateExistingMovie(){
+        List<ReviewDTO> reviews = new ArrayList<>();
+
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest1")
+                .rating(8L)
+                .content("ts1")
+                .build());
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest2")
+                .rating(9L)
+                .content("ts2")
+                .build());
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest3")
+                .rating(10L)
+                .content("ts3")
+                .build());
+
+        MovieDTO movieUpdate = MovieDTO.builder()
+                .id(2L)
+                .title("UpdateTest")
+                .director("UpdateDirector")
+                .genre("UpdateGenre")
+                .year(777L)
+                .description("UpdateDescription")
+                .addedBy("UpdateAddedBy")
+                .reviews(reviews)
+                .build();
+
+        HttpEntity<MovieDTO> request = new HttpEntity<>(movieUpdate);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("admin", "admin")
+                .exchange("/movies/2", HttpMethod.PUT, request, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        DocumentContext context = JsonPath.parse(response.getBody());
+        Number id = context.read("$.id");
+        assertThat(id).isEqualTo(2);
+        Number year = context.read("$.year");
+        assertThat(year).isEqualTo(777);
+        String description = context.read("$.description");
+        assertThat(description).isEqualTo("UpdateDescription");
+    }
+
+    @Test
+    void shouldNotUpdateNonExistingMovie(){
+        List<ReviewDTO> reviews = new ArrayList<>();
+
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest1")
+                .rating(8L)
+                .content("ts1")
+                .build());
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest2")
+                .rating(9L)
+                .content("ts2")
+                .build());
+        reviews.add(ReviewDTO.builder()
+                .review_author("Autest3")
+                .rating(10L)
+                .content("ts3")
+                .build());
+
+        MovieDTO unknownMovie = MovieDTO.builder()
+                .id(2L)
+                .title("UpdateTest")
+                .director("UpdateDirector")
+                .genre("UpdateGenre")
+                .year(777L)
+                .description("UpdateDescription")
+                .addedBy("UpdateAddedBy")
+                .reviews(reviews)
+                .build();
+
+        log.info(AnsiColors.blackOnBlue(unknownMovie));
+        HttpEntity<MovieDTO> request = new HttpEntity<>(unknownMovie);
+        ResponseEntity<Void> response = restTemplate
+                .withBasicAuth("admin", "admin")
+                .exchange("/movies/99999", HttpMethod.PUT, request, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+//    @Test
+//    void shouldDeleteExistingMovie(){
+//        ResponseEntity<Void> response = restTemplate
+//                .withBasicAuth("admin", "admin")
+//                .exchange("/movies/3")
+//    }
 }

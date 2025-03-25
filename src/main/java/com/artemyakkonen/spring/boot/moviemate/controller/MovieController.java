@@ -61,7 +61,7 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    private ResponseEntity<Void> addNewFilm(@RequestBody Movie newMovie, UriComponentsBuilder ucb, Principal principal){
+    private ResponseEntity<Void> addNewMovie(@RequestBody Movie newMovie, UriComponentsBuilder ucb, Principal principal){
         newMovie.setAddedBy(principal.getName());
         log.info(AnsiColors.blackOnBlue(principal.getName()));
         URI locationOfNewFilm = movieService.createMovie(newMovie, ucb);
@@ -79,6 +79,25 @@ public class MovieController {
                 )
         );
                 return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/movies/{requestedId}")
+    private ResponseEntity<MovieDTO> updateMovie(@PathVariable Long requestedId, @RequestBody MovieDTO movieDTO){
+        MovieDTO updatedMovie = movieService.updateMovie(requestedId, movieDTO);
+        if(updatedMovie == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedMovie);
+    }
+
+    @DeleteMapping("/movies/{requestedId}")
+    private ResponseEntity<Void> deleteMovie(@PathVariable Long requestedId){
+        MovieDTO movieDTO = movieService.getMovieById(requestedId);
+        if(movieDTO == null){
+            return ResponseEntity.notFound().build();
+        }
+        movieService.deleteMovie(requestedId);
+        return ResponseEntity.noContent().build();
     }
 
 
